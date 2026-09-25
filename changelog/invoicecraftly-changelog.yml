@@ -1,0 +1,84 @@
+generated: '2026-09-25'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://invoicecraftly.com/changelog
+sources:
+- https://invoicecraftly.com/changelog
+entries:
+- breaking: false
+  highlights:
+  - A new document type for pre-transaction terms
+  - Proforma invoice is now a supported document type
+  - Create a proforma invoice. Proforma invoice joins Invoice, Quote, Estimate, Receipt, and Credit Note as a first‑class document type, with
+    its own independent number sequence, a valid‑until date, and a required preliminary‑status notice on export.
+  - Convert to invoice. When a proforma is confirmed, create a fresh invoice from it with its own number — the source proforma is left unchanged,
+    and the new invoice opens for review before anything is sent.
+  date: '2026-09-22'
+- breaking: false
+  highlights:
+  - Norway and Sweden payment references
+  - Generate KID and OCR reference numbers, not just check them
+  - Generate a KID number. The Norway KID tool can now create a valid reference from your own digits, including padding to a bank‑agreed length,
+    in addition to checking an existing one.
+  - Generate an OCR reference. The Sweden OCR tool can now create a valid reference (variable or fixed length), in addition to checking an existing
+    one.
+  date: '2026-09-21'
+- breaking: false
+  highlights:
+  - Official Postman collection for the Document API
+  - Postman collection. Import a ready‑made collection and production environment for the Developer Document API and start calling it without
+    hand‑writing requests.
+  date: '2026-09-20'
+- breaking: false
+  highlights:
+  - Send a payment reminder from the Share menu
+  - Remind about payment. From the More menu, start a prefilled email or WhatsApp reminder for any invoice that is unpaid, partially paid, or
+    overdue.
+  date: '2026-09-18'
+- breaking: false
+  highlights:
+  - Now visible on the document itself
+  - Payment status and balance due now show on the exported PDF
+  - Status on the PDF. Exported and printed invoices now stamp Unpaid, Partially paid, Paid, or Overdue, plus a Balance due line whenever money
+    is still owed.
+  date: '2026-09-17'
+- breaking: false
+  highlights:
+  - Send it without leaving the editor
+  - Share an invoice by email or WhatsApp
+  - Share via email or WhatsApp. From the More menu, start a prefilled email or WhatsApp message with the invoice number, amount, and due date
+    already filled in.
+  date: '2026-09-17'
+- breaking: false
+  highlights:
+  - Keep receipts with the invoice
+  - Attach files to an invoice
+  - Attach files to invoices. Add up to 5 supporting files per invoice — PDF or image, up to 5MB each.
+  date: '2026-09-17'
+- breaking: false
+  highlights:
+  - Track who has paid
+  - Record partial and full payments on an invoice
+  - Record payments. Log an amount and date paid against any invoice, including partial payments.
+  date: '2026-09-17'
+- breaking: false
+  highlights:
+  - More control over line pricing
+  - Per-line discounts and reusable tax rate presets
+  - Per-line discounts. Apply a percentage or fixed‑amount discount to any individual line item; tax is calculated on the discounted amount.
+  date: '2026-09-16'
+- breaking: false
+  highlights:
+  - Less retyping in the editor
+  - Save a client or line item once, reuse it on the next invoice
+  - Saved clients. Save a buyer from the Buyer section, then pick them from a combobox on a future document instead of retyping their details.
+  date: '2026-09-10'
+- breaking: false
+  highlights:
+  - Easier integration, lighter exports
+  - Official npm and PyPI packages, plus smaller PDF files
+  - Official Node.js client. @invoicecraftly/client is published on npm with install and quick‑start snippets on the Developer Document API docs.
+  date: '2026-09-09'
+current_version: '2026-09-22'
+note: Versioning scheme is date‑based as used by the changelog entries.
+docs: https://invoicecraftly.com/changelog

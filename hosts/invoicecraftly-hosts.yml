@@ -1,0 +1,77 @@
+generated: '2026-09-25'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 5
+  own: 2
+  other_domain: 1
+  platform: 2
+  roles:
+  - api
+  - other
+  - website
+hosts:
+- host: api.invoicecraftly.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: invoicecraftly.com
+  role: api
+  relation: own
+- host: documenter.getpostman.com
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: getpostman.com
+  role: other
+  relation: other-domain
+- host: invoicecraftly.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Security
+  - PrivacyPolicy
+  - Documentation
+  - ChangeLog
+  - APIReference
+  - Website
+  - GettingStarted
+  - Support
+  serves:
+  - api
+  - docs
+  - spec
+  - cdn
+  vendor: cloudflare
+  registrable_domain: invoicecraftly.com
+  role: website
+  relation: own
+- host: pypi.org
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: pypi.org
+  role: other
+  relation: platform
+- host: www.npmjs.com
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: npmjs.com
+  role: other
+  relation: platform

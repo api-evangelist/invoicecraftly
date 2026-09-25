@@ -1,0 +1,286 @@
+{
+  "@context": {
+    "@vocab": "https://invoicecraftly.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "invoicecraftly": "https://invoicecraftly.com/schema#",
+    "PublicDocumentV1": "invoicecraftly:PublicDocumentV1",
+    "type": {
+      "@id": "invoicecraftly:type",
+      "@type": "xsd:string"
+    },
+    "number": {
+      "@id": "invoicecraftly:number",
+      "@type": "xsd:string"
+    },
+    "issueDate": {
+      "@id": "invoicecraftly:issueDate",
+      "@type": "xsd:date"
+    },
+    "dueDate": {
+      "@id": "invoicecraftly:dueDate",
+      "@type": "xsd:date"
+    },
+    "currency": {
+      "@id": "invoicecraftly:currency",
+      "@type": "xsd:string"
+    },
+    "locale": {
+      "@id": "invoicecraftly:locale",
+      "@type": "xsd:string"
+    },
+    "template": {
+      "@id": "invoicecraftly:template",
+      "@type": "xsd:string"
+    },
+    "seller": {
+      "@id": "invoicecraftly:seller",
+      "@type": "@id"
+    },
+    "buyer": {
+      "@id": "invoicecraftly:buyer",
+      "@type": "@id"
+    },
+    "items": {
+      "@id": "invoicecraftly:items",
+      "@container": "@list"
+    },
+    "payment": {
+      "@id": "invoicecraftly:payment",
+      "@type": "@id"
+    },
+    "notes": {
+      "@id": "invoicecraftly:notes",
+      "@type": "xsd:string"
+    },
+    "branding": {
+      "@id": "invoicecraftly:branding",
+      "@type": "@id"
+    },
+    "Party": "invoicecraftly:Party",
+    "name": {
+      "@id": "invoicecraftly:name",
+      "@type": "xsd:string"
+    },
+    "addressLines": {
+      "@id": "invoicecraftly:addressLines",
+      "@container": "@list"
+    },
+    "LineItem": "invoicecraftly:LineItem",
+    "description": {
+      "@id": "invoicecraftly:description",
+      "@type": "xsd:string"
+    },
+    "quantity": {
+      "@id": "invoicecraftly:quantity",
+      "@type": "xsd:decimal"
+    },
+    "unitPrice": {
+      "@id": "invoicecraftly:unitPrice",
+      "@type": "xsd:decimal"
+    },
+    "taxRate": {
+      "@id": "invoicecraftly:taxRate",
+      "@type": "xsd:decimal"
+    },
+    "taxLabel": {
+      "@id": "invoicecraftly:taxLabel",
+      "@type": "xsd:string"
+    },
+    "Payment": "invoicecraftly:Payment",
+    "bankName": {
+      "@id": "invoicecraftly:bankName",
+      "@type": "xsd:string"
+    },
+    "iban": {
+      "@id": "invoicecraftly:iban",
+      "@type": "xsd:string"
+    },
+    "bic": {
+      "@id": "invoicecraftly:bic",
+      "@type": "xsd:string"
+    },
+    "accountNumber": {
+      "@id": "invoicecraftly:accountNumber",
+      "@type": "xsd:string"
+    },
+    "routingNumber": {
+      "@id": "invoicecraftly:routingNumber",
+      "@type": "xsd:string"
+    },
+    "reference": {
+      "@id": "invoicecraftly:reference",
+      "@type": "xsd:string"
+    },
+    "poNumber": {
+      "@id": "invoicecraftly:poNumber",
+      "@type": "xsd:string"
+    },
+    "terms": {
+      "@id": "invoicecraftly:terms",
+      "@type": "xsd:string"
+    },
+    "dueText": {
+      "@id": "invoicecraftly:dueText",
+      "@type": "xsd:string"
+    },
+    "qrMode": {
+      "@id": "invoicecraftly:qrMode",
+      "@type": "xsd:string"
+    },
+    "Branding": "invoicecraftly:Branding",
+    "accentColor": {
+      "@id": "invoicecraftly:accentColor",
+      "@type": "xsd:string"
+    },
+    "stampStyle": {
+      "@id": "invoicecraftly:stampStyle",
+      "@type": "xsd:string"
+    },
+    "logo": {
+      "@id": "invoicecraftly:logo",
+      "@type": "@id"
+    },
+    "Logo": "invoicecraftly:Logo",
+    "data": {
+      "@id": "invoicecraftly:data",
+      "@type": "xsd:string"
+    },
+    "mimeType": {
+      "@id": "invoicecraftly:mimeType",
+      "@type": "xsd:string"
+    },
+    "PublicStructuredArtifactRequestV1": "invoicecraftly:PublicStructuredArtifactRequestV1",
+    "document": {
+      "@id": "invoicecraftly:document",
+      "@type": "@id"
+    },
+    "supplement": {
+      "@id": "invoicecraftly:supplement",
+      "@type": "@id"
+    },
+    "ComplianceSupplementV1": "invoicecraftly:ComplianceSupplementV1",
+    "version": {
+      "@id": "invoicecraftly:version",
+      "@type": "xsd:integer"
+    },
+    "buyerReference": {
+      "@id": "invoicecraftly:buyerReference",
+      "@type": "xsd:string"
+    },
+    "lines": {
+      "@id": "invoicecraftly:lines",
+      "@container": "@list"
+    },
+    "ComplianceParty": "invoicecraftly:ComplianceParty",
+    "postalAddress": {
+      "@id": "invoicecraftly:postalAddress",
+      "@type": "@id"
+    },
+    "electronicAddressSchemeId": {
+      "@id": "invoicecraftly:electronicAddressSchemeId",
+      "@type": "xsd:string"
+    },
+    "taxId": {
+      "@id": "invoicecraftly:taxId",
+      "@type": "@id"
+    },
+    "vatIdentifier": {
+      "@id": "invoicecraftly:vatIdentifier",
+      "@type": "xsd:string"
+    },
+    "taxRegistrationIdentifier": {
+      "@id": "invoicecraftly:taxRegistrationIdentifier",
+      "@type": "@id"
+    },
+    "PostalAddress": "invoicecraftly:PostalAddress",
+    "countryCode": {
+      "@id": "invoicecraftly:countryCode",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "invoicecraftly:city",
+      "@type": "xsd:string"
+    },
+    "postalCode": {
+      "@id": "invoicecraftly:postalCode",
+      "@type": "xsd:string"
+    },
+    "region": {
+      "@id": "invoicecraftly:region",
+      "@type": "xsd:string"
+    },
+    "TaxIdMetadata": "invoicecraftly:TaxIdMetadata",
+    "role": {
+      "@id": "invoicecraftly:role",
+      "@type": "xsd:string"
+    },
+    "schemeId": {
+      "@id": "invoicecraftly:schemeId",
+      "@type": "xsd:string"
+    },
+    "taxSchemeId": {
+      "@id": "invoicecraftly:taxSchemeId",
+      "@type": "xsd:string"
+    },
+    "TaxRegistrationIdentifier": "invoicecraftly:TaxRegistrationIdentifier",
+    "value": {
+      "@id": "invoicecraftly:value",
+      "@type": "xsd:string"
+    },
+    "ComplianceLine": "invoicecraftly:ComplianceLine",
+    "sourceIndex": {
+      "@id": "invoicecraftly:sourceIndex",
+      "@type": "xsd:integer"
+    },
+    "unitCode": {
+      "@id": "invoicecraftly:unitCode",
+      "@type": "xsd:string"
+    },
+    "vatCategoryCode": {
+      "@id": "invoicecraftly:vatCategoryCode",
+      "@type": "xsd:string"
+    },
+    "vatExemptionReason": {
+      "@id": "invoicecraftly:vatExemptionReason",
+      "@type": "xsd:string"
+    },
+    "vatExemptionReasonCode": {
+      "@id": "invoicecraftly:vatExemptionReasonCode",
+      "@type": "xsd:string"
+    },
+    "ReadinessResponse": "invoicecraftly:ReadinessResponse",
+    "apiVersion": {
+      "@id": "invoicecraftly:apiVersion",
+      "@type": "xsd:string"
+    },
+    "profileId": {
+      "@id": "invoicecraftly:profileId",
+      "@type": "xsd:string"
+    },
+    "specificationIdentifier": {
+      "@id": "invoicecraftly:specificationIdentifier",
+      "@type": "xsd:string"
+    },
+    "ready": {
+      "@id": "invoicecraftly:ready",
+      "@type": "xsd:boolean"
+    },
+    "gaps": {
+      "@id": "invoicecraftly:gaps",
+      "@container": "@list"
+    },
+    "ErrorEnvelope": "invoicecraftly:ErrorEnvelope",
+    "error": {
+      "@id": "invoicecraftly:error"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "InvoiceCraftly Developer Document API API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects InvoiceCraftly Developer Document API's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-09-25) from openapi/invoicecraftly-openapi.json.",
+  "dcterms:created": "2026-09-25",
+  "dcterms:source": [
+    "openapi/invoicecraftly-openapi.json"
+  ]
+}

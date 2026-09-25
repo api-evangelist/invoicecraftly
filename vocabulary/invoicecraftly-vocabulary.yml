@@ -1,0 +1,101 @@
+generated: '2026-09-25'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/invoicecraftly-documents-api-openapi.yml
+- openapi/invoicecraftly-openapi.json
+- openapi/invoicecraftly-structured-invoicing-api-openapi.yml
+vocabulary:
+  name: InvoiceCraftly Developer Document API Domain Vocabulary
+  description: 'Terms declared by InvoiceCraftly Developer Document API''s own API contract: its resource groups, objects and enumerations, with
+    the contract''s definitions. Derived, not authored.'
+  version: '2026-09-25'
+  terms:
+  - term: Documents
+    definition: Invoice document generation.
+    tags:
+    - Resource Group
+    source: openapi/invoicecraftly-documents-api-openapi.yml
+  - term: Structured invoicing
+    definition: EN16931-core readiness and structured XML.
+    tags:
+    - Resource Group
+    source: openapi/invoicecraftly-openapi.json
+  - term: Payment
+    definition: 'Object declared by the contract with fields: bankName, iban, bic, accountNumber, routingNumber, reference, poNumber, terms, dueText,
+      qrMode.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/Payment
+  - term: Party
+    definition: 'Object declared by the contract with fields: name, addressLines.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/Party
+  - term: Logo
+    definition: 'Object declared by the contract with fields: data, mimeType.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/Logo
+  - term: Branding
+    definition: 'Object declared by the contract with fields: accentColor, stampStyle, logo.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/Branding
+  - term: ErrorEnvelope
+    definition: 'Object declared by the contract with fields: error.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/ErrorEnvelope
+  - term: LineItem
+    definition: 'Object declared by the contract with fields: description, quantity, unitPrice, taxRate, taxLabel.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/LineItem
+  - term: PublicDocumentV1
+    definition: 'Object declared by the contract with fields: type, number, issueDate, dueDate, currency, locale, template, seller, buyer, items,
+      payment, notes. (1 more)'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-documents-api-openapi.yml#/components/schemas/PublicDocumentV1
+  - term: PublicStructuredArtifactRequestV1
+    definition: 'Object declared by the contract with fields: document, supplement.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/PublicStructuredArtifactRequestV1
+  - term: ComplianceSupplementV1
+    definition: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public
+      surface.
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/ComplianceSupplementV1
+  - term: ComplianceParty
+    definition: 'Object declared by the contract with fields: postalAddress, electronicAddressSchemeId, taxId, vatIdentifier, taxRegistrationIdentifier.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/ComplianceParty
+  - term: PostalAddress
+    definition: 'Object declared by the contract with fields: countryCode, city, postalCode, region.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/PostalAddress
+  - term: TaxIdMetadata
+    definition: 'Object declared by the contract with fields: role, schemeId, taxSchemeId.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/TaxIdMetadata
+  - term: TaxRegistrationIdentifier
+    definition: 'Object declared by the contract with fields: value, taxSchemeId.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/TaxRegistrationIdentifier
+  - term: ComplianceLine
+    definition: 'Object declared by the contract with fields: sourceIndex, unitCode, vatCategoryCode, vatExemptionReason, vatExemptionReasonCode.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/ComplianceLine
+  - term: ReadinessResponse
+    definition: 'Object declared by the contract with fields: apiVersion, profileId, specificationIdentifier, ready, gaps.'
+    tags:
+    - Object
+    source: openapi/invoicecraftly-openapi.json#/components/schemas/ReadinessResponse

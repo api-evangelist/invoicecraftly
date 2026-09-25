@@ -1,0 +1,315 @@
+openapi: 3.2.0
+info:
+  title: Invoicecraftly Documents API
+  version: 1.0.0-beta
+  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: invoicecraftly-openapi.json, invoicecraftly-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://invoicecraftly.com
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Documents
+  description: Invoice document generation.
+paths:
+  /api/v1/documents/pdf:
+    post:
+      tags:
+      - Documents
+      summary: Generate an invoice PDF
+      description: Generate a print-ready invoice PDF using the currently supported Ledger template. The beta supports invoice documents only.
+      operationId: generateInvoicePdf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicDocumentV1'
+      responses:
+        '200':
+          description: Print-ready invoice PDF.
+          headers:
+            X-Render-Duration-Ms:
+              description: Render duration when supplied by the rendering service.
+              schema:
+                type: string
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationFailed'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '422':
+          $ref: '#/components/responses/TargetNotSupported'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        '504':
+          $ref: '#/components/responses/RenderTimeout'
+    servers:
+    - url: https://invoicecraftly.com
+      description: Production
+components:
+  schemas:
+    Party:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - addressLines
+      properties:
+        name:
+          type: string
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
+          type: string
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
+    PublicDocumentV1:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - issueDate
+      - currency
+      - seller
+      - buyer
+      - items
+      properties:
+        type:
+          type: string
+          enum:
+          - invoice
+          description: Only invoice is currently supported.
+        number:
+          type: string
+        issueDate:
+          type: string
+          format: date
+        dueDate:
+          type: string
+          format: date
+        currency:
+          type: string
+          pattern: ^[A-Z]{3}$
+          examples:
+          - USD
+          - EUR
+          - DKK
+          - NOK
+        locale:
+          type: string
+          examples:
+          - en-US
+          - da-DK
+          - nb-NO
+        template:
+          type: string
+          enum:
+          - ledger
+          description: Only Ledger is currently supported.
+        seller:
+          $ref: '#/components/schemas/Party'
+        buyer:
+          $ref: '#/components/schemas/Party'
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LineItem'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        notes:
+          type: string
+        branding:
+          $ref: '#/components/schemas/Branding'
+    Logo:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - mimeType
+      properties:
+        data:
+          type: string
+          contentEncoding: base64
+          description: Base64 image data. Decoded size is limited to 512 KiB.
+        mimeType:
+          type: string
+          enum:
+          - image/png
+          - image/jpeg
+    Branding:
+      type: object
+      additionalProperties: false
+      properties:
+        accentColor:
+          type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
+    Payment:
+      type: object
+      additionalProperties: false
+      properties:
+        bankName:
+          type: string
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
+          type: string
+          enum:
+          - ''
+          - contact
+          - epc
+          - paymentLink
+  responses:
+    AuthenticationFailed:
+      description: API key is missing, invalid, or unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    UnsupportedMediaType:
+      description: PDF generation requires application/json.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RenderTimeout:
+      description: The PDF render exceeded its time budget.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    TargetNotSupported:
+      description: The requested document type or template is recognized but not currently supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    ServiceUnavailable:
+      description: A required service is unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    InvalidRequest:
+      description: Request body is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RateLimited:
+      description: Monthly or service quota reached.
+      headers:
+        Retry-After:
+          schema:
+            type: string
+          description: Retry delay in seconds when supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: dk_live_*
+externalDocs:
+  description: Developer documentation
+  url: https://invoicecraftly.com/developers/
+x-refined-from:
+- invoicecraftly-openapi.json
+- invoicecraftly-openapi.json

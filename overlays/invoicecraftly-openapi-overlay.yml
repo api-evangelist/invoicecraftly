@@ -1,0 +1,10 @@
+generated: '2026-09-25'
+method: derived
+source:
+- openapi/invoicecraftly-openapi.json
+overlay:
+  openapi: "3.1.0"
+  info:
+    title: InvoiceCraftly API (enhanced)
+  paths: {}
+  # No actual modifications; placeholder overlay

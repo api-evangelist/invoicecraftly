@@ -1,0 +1,15 @@
+generated: '2026-09-25'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://invoicecraftly.com/developers/recipes/
+sources:
+- https://invoicecraftly.com/developers/recipes/
+- https://invoicecraftly.com/developers/recipes/saas-billing-invoice-pdf-integration
+name: InvoiceCraftly Developer Document API pricing
+audience: developer-api
+pricing_basis: free
+plans:
+- name: Beta Free
+  price_text: Free during the beta, 100 renders included per month
+  description: Free tier during beta offering 100 document renders per month.
+docs: https://invoicecraftly.com/developers/recipes/

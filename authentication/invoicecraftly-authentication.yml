@@ -1,0 +1,13 @@
+generated: '2026-09-25'
+method: derived
+source: openapi/invoicecraftly-openapi.json
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: dk_live_*
+  sources:
+  - openapi/invoicecraftly-openapi.json

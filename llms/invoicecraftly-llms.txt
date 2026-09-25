@@ -1,0 +1,121 @@
+# InvoiceCraftly
+
+> InvoiceCraftly is a free invoicing product for creating professional invoices, quotes, estimates, receipts, and credit notes. Core document creation and export work without an account, with custom branding, payment QR options, reusable workspace features, and PDF, PNG, SVG, and CSV exports.
+
+## Start here
+
+- [InvoiceCraftly homepage](https://invoicecraftly.com/): Overview of the free invoice generator, document types, branding, payment QR options, exports, Smart Start, storage choices, and common questions.
+- [Create an invoice](https://invoicecraftly.com/editor/): Create and edit invoices, quotes, estimates, receipts, and credit notes.
+- [Smart Start](https://invoicecraftly.com/start/?mode=describe): Describe the work, customer, prices, dates, and payment terms you know, review the extracted details, then create an editable invoice draft.
+- [Complete invoice guide](https://invoicecraftly.com/guide): Step-by-step guidance for entering details, line items, payment terms, branding, review, backups, and export.
+- [Templates and finished examples](https://invoicecraftly.com/templates/): Profession-focused starting points with fictional examples.
+- [Free invoice tools](https://invoicecraftly.com/tools/): Calculators, validators, company lookup, payment-reference tools, and e-invoicing helpers.
+- [Invoicing glossary](https://invoicecraftly.com/glossary/): Plain-language definitions, worked examples, related concepts, and relevant InvoiceCraftly tools for invoice documents, fields, project billing, and payments.
+- [Product changelog](https://invoicecraftly.com/changelog): Dated customer-facing product changes.
+
+## Developer API
+
+- [Developer Document API](https://invoicecraftly.com/developers/): Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML with bearer API-key authentication.
+- [OpenAPI 3.1 specification](https://invoicecraftly.com/developers/openapi.json): Machine-readable contract for the three released v1 API endpoints.
+- [APIs.json descriptor](https://invoicecraftly.com/apis.json): Discovery metadata linking the API, documentation, OpenAPI contract, Postman collection, package registries, and public SDK source repositories.
+- [Published Postman documentation](https://documenter.getpostman.com/view/2986090/2sBYB1PoQR): Public request examples and endpoint documentation.
+- [TypeScript SDK](https://www.npmjs.com/package/@invoicecraftly/client): npm client for the Developer Document API.
+- [Python SDK](https://pypi.org/project/invoicecraftly/): Python client for the Developer Document API.
+
+The structured API surface targets EN16931-core only. It does not produce a Peppol BIS artifact, transmit through a Peppol Access Point, or make an official conformance claim.
+
+## Nordic invoicing
+
+- [Norway invoice generator](https://invoicecraftly.com/no/): Norwegian Bokmål experience with NOK defaults, Norwegian business and VAT fields, controlled invoice numbering, Makuler handling, and support for Norwegian VAT presentation including foreign-currency invoices where VAT must also be shown in NOK.
+- [Finland invoice generator](https://invoicecraftly.com/fi/): Finnish experience with EUR and fi-FI defaults, Business ID fields, ALV details, Finnish payment-reference tools, and guidance for Finnish invoicing workflows.
+- [Denmark invoice generator](https://invoicecraftly.com/dk/): Danish experience with DKK and da-DK defaults, Danish business fields, CVR lookup, invoice guidance, and related tools.
+- [Danish invoice requirements](https://invoicecraftly.com/dk/krav-til-faktura/): Source-backed checklist for ordinary full-invoice content in Denmark, with direct links to Retsinformation and Skattestyrelsen.
+- [Sweden invoice generator](https://invoicecraftly.com/se/): Swedish experience with Swedish company and VAT fields, F-tax support, Swedish invoice guidance, and related tools.
+
+## Company lookup for invoicing
+
+- [Company Lookup](https://invoicecraftly.com/tools/company-lookup/): Find public company details and start an invoice with reviewed customer information already filled in. Current markets are Norway, Finland, Denmark, and Sweden.
+- [Bedriftssøk Norge](https://invoicecraftly.com/no/verktoy/bedriftssok/): Search Brønnøysundregistrenes Enhetsregister by business name or organisation number, review the selected company, then start a Norwegian invoice with customer details filled in.
+- [Yrityshaku Suomi](https://invoicecraftly.com/fi/tyokalut/yrityshaku/): Search PRH/YTJ public company data by name or Y-tunnus, review the result, then start a Finnish invoice with selected customer details.
+- [CVR-opslag Danmark](https://invoicecraftly.com/dk/vaerktojer/cvr-opslag/): Enter a Danish CVR number, review public company identity and address information, then start a Danish invoice with selected customer details.
+- [Företagssök Sverige](https://invoicecraftly.com/se/verktyg/foretagssok/): Search Swedish company information, review the selected organisation, then start a Swedish invoice with customer details filled in.
+
+Company lookup helps with public business details; the issuer should still confirm the customer and transaction-specific tax details before sending an invoice.
+
+## Tools
+
+- [SEPA payment QR code generator](https://invoicecraftly.com/tools/sepa-payment-qr-generator): Creates an EPC/SEPA payment QR code from reviewed EUR bank-transfer details for a compatible banking app to prefill; it does not authorize, submit, settle, or confirm a transfer.
+- [IBAN validator](https://invoicecraftly.com/tools/iban-validator): Checks whether an IBAN has a valid basic format and checksum; it does not contact a bank or confirm account ownership.
+- [Static QR code generator](https://invoicecraftly.com/tools/qr-code-generator): Creates static QR codes for reviewed links, contact cards, email, phone numbers, and plain text.
+- [Invoice readiness checklist generator](https://invoicecraftly.com/tools/invoice-readiness-checklist): Builds a document-aware pre-send review checklist.
+- [Invoice due date calculator](https://invoicecraftly.com/tools/invoice-due-date-calculator): Adds an agreed calendar-day payment term to an invoice issue date.
+- [Invoice number generator and format planner](https://invoicecraftly.com/tools/invoice-number-generator): Previews a prefix, optional year, safe separator, and padded invoice sequence.
+- [EU VAT number checker (VIES)](https://invoicecraftly.com/tools/vat-number-checker): Checks one EU Member State or Northern Ireland VAT number against the European Commission VIES service.
+- [VAT calculator](https://invoicecraftly.com/tools/vat-calculator): Adds VAT to a net amount or extracts VAT from a gross amount using a rate the user supplies.
+- [E-invoice XML viewer & checker](https://invoicecraftly.com/tools/e-invoice-xml-viewer): Opens supported Peppol BIS Billing 3, UBL, OIOUBL and Finvoice XML, shows mapped invoice details, and runs InvoiceCraftly’s bounded deterministic preflight. Formal EN 16931 or Peppol business-rule validation, recipient capability and network acceptance are shown separately when those checks were not run.
+
+## Invoice and e-invoicing guidance
+
+- [Invoice and freelancer guides](https://invoicecraftly.com/guides/): Practical guidance on invoice creation, freelancer workflows, country requirements, company lookup, branding, exports, and e-invoicing topics.
+- [Norway invoice requirements](https://invoicecraftly.com/guides/norway-invoice-requirements): Source-backed guide to Norwegian invoice numbering, MVA, organisation details, foreign-currency VAT in NOK, Makuler, and EHF.
+- [Norway EHF and e-invoice 2027 checker](https://invoicecraftly.com/no/verktoy/ehf-faktura-sjekk/): Source-backed three-question readiness check tied to the enacted 2026 law and commencement rules; it does not transmit an EHF invoice or certify compliance.
+- [Krav til faktura i Norge](https://invoicecraftly.com/guides/krav-til-faktura-norge): Norwegian-language guide to the same core Norway invoice requirements.
+- [Finn organisasjonsnummer til faktura](https://invoicecraftly.com/guides/finne-organisasjonsnummer-for-faktura): Find and review the organisation number used on a Norwegian invoice.
+- [Bedriftssøk til faktura](https://invoicecraftly.com/guides/bedriftssok-til-faktura): Use public company lookup details as a reviewed starting point for a Norwegian invoice.
+- [Sweden invoice requirements](https://invoicecraftly.com/guides/sweden-invoice-requirements): Source-backed guide to Swedish invoice numbering, VAT details, company identity, F-tax, foreign-currency VAT, and public-sector e-invoicing.
+- [Krav på faktura i Sverige](https://invoicecraftly.com/guides/krav-pa-faktura-sverige): Swedish-language guide to the same core Sweden invoice requirements.
+- [Invoice generator without signup](https://invoicecraftly.com/guides/invoice-generator-without-signup): Explains document creation without an account, export formats, workspace history, and backup choices.
+
+InvoiceCraftly can export an EN 16931 / UBL XML invoice file in beta when the required invoice details are ready. PDF and other visual exports are different from structured e-invoices, and Peppol/EHF network delivery remains a separate step through a compatible service or network.
+
+## Document types
+
+- [Invoice](https://invoicecraftly.com/editor/?type=invoice): Request payment for supplied or agreed goods or services.
+- [Quote](https://invoicecraftly.com/document-types/quote): Present proposed pricing before acceptance.
+- [Estimate](https://invoicecraftly.com/document-types/estimate): Present an informed approximation before final scope or cost is known.
+- [Receipt](https://invoicecraftly.com/document-types/receipt): Record payment already received.
+- [Credit note](https://invoicecraftly.com/document-types/credit-note): Reduce or correct an earlier invoice.
+
+## Profession templates
+
+- [Contractor invoice template](https://invoicecraftly.com/templates/contractor): Labour, materials, project references, and tax.
+- [Freelancer invoice template](https://invoicecraftly.com/templates/freelancer): Project milestones and deliverables.
+- [Consultant invoice template](https://invoicecraftly.com/templates/consultant): Retainers, workshops, research hours, and VAT.
+- [Photographer invoice template](https://invoicecraftly.com/templates/photographer): Production, retouching, and usage licensing.
+- [Hospitality invoice template](https://invoicecraftly.com/templates/hospitality): Accommodation, events, branding, tax, and scan-to-pay.
+- [Graphic designer invoice template](https://invoicecraftly.com/templates/graphic-designer): Brand identity, packaging, launch assets, and milestones.
+- [Web developer invoice template](https://invoicecraftly.com/templates/web-developer): Development milestones, accessibility work, VAT, and client references.
+- [Social media manager invoice template](https://invoicecraftly.com/templates/social-media-manager): Monthly content, community management, reporting, and retainer billing.
+- [Marketing agency invoice template](https://invoicecraftly.com/templates/marketing-agency): Campaign services, creative production, media costs, and tax.
+- [Virtual assistant invoice template](https://invoicecraftly.com/templates/virtual-assistant): Hourly operations, administration, and service periods.
+- [Tutor and coach invoice template](https://invoicecraftly.com/templates/tutor-coach): Sessions, learning materials, and progress review.
+- [Boutique retail invoice template](https://invoicecraftly.com/templates/boutique-retail): Wholesale quantities, VAT, delivery, purchase-order references, and EPC/SEPA QR.
+
+## Browser extensions
+
+- [Invoice Capture for Chrome](https://invoicecraftly.com/chrome-extension): Select work details on a webpage, review the selected text, then open the reviewed lines in InvoiceCraftly as an invoice, quote, or estimate.
+- [Invoice Capture for Microsoft Edge](https://invoicecraftly.com/edge-extension): The same select, review, and create workflow for Microsoft Edge.
+
+## Workspace and storage
+
+Core document creation does not require an account. Working documents are saved on the current device by default. Users can export workspace backups, and eligible signed-in users can choose supported Personal Cloud backup options such as Dropbox or Google Drive.
+
+- [Account](https://invoicecraftly.com/account/): Sign-in, account controls, and available Personal Cloud options.
+- [Privacy](https://invoicecraftly.com/privacy): Detailed information about document storage, optional services, account data, analytics choices, and legal responsibility.
+- [Security](https://invoicecraftly.com/security): Security, recoverability, network-service, and product-limit details.
+
+## Key product limits
+
+- InvoiceCraftly helps prepare invoices and related business documents; tax treatment, legal requirements, record retention, and recipient-specific e-invoicing rules depend on the transaction and jurisdiction.
+- Public company lookup can fill customer details, but it is not a substitute for checking the customer and transaction-specific VAT or tax treatment.
+- A payment QR carries payment instructions; confirm the encoded destination and payment details before sending the document.
+- EN 16931 / UBL XML export is available in beta; Peppol, EHF, or other network delivery remains a separate step.
+- Template, use-case, and screenshot data is fictional unless explicitly stated otherwise.
+
+## Trust and contact
+
+- [About](https://invoicecraftly.com/about): Product purpose, founder identity, and operating approach.
+- [Privacy](https://invoicecraftly.com/privacy): Data handling and responsibility details.
+- [Security](https://invoicecraftly.com/security): Security and product limitations.
+- [Contact](https://invoicecraftly.com/contact): Product, support, technical, and privacy enquiries.
+- [Partnerships](https://invoicecraftly.com/partnerships): Product integration, distribution, education, and licensing enquiries.

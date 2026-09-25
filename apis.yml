@@ -1,23 +1,125 @@
 aid: invoicecraftly
 name: InvoiceCraftly Developer Document API
-description: 'InvoiceCraftly Developer Document API is a company surfaced via the API Evangelist harvest
-  backlog (source: new-submission) and added to the network as a stub for full-pipeline profiling.'
+image: https://invoicecraftly.com/assets/social/homepage-invoice-generator-1200x630.png
+description: InvoiceCraftly provides a free, no‑signup invoice generator and related tools. Users can create, edit, and export professional invoices,
+  quotes, estimates, receipts, and credit notes in PDF, PNG, SVG, and CSV formats. The platform offers templates, company lookup, QR‑code payment
+  integration, and multilingual support, targeting freelancers, small businesses, and enterprises seeking a simple invoicing solution without
+  account requirements.
 url: https://raw.githubusercontent.com/api-evangelist/invoicecraftly/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:new-submission
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-25 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-09-25'
 modified: '2026-09-25'
 tags:
-- Company
-apis: []
+- Invoicing
+- Invoice Generator
+- Free Tools
+- Document Export
+- Payment QR
+- No Signup
+- CSV Import
+- Company Lookup
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/invoicecraftly-openapi-overlay.yml
+- type: AgenticAccess
+  url: agentic-access/invoicecraftly-agentic-access.yml
+- type: Plans
+  url: plans/invoicecraftly-plans-pricing.yml
+- type: Spectral
+  url: rules/invoicecraftly-rules.yml
+- type: JSONLD
+  url: json-ld/invoicecraftly-context.jsonld
+- type: Vocabulary
+  url: vocabulary/invoicecraftly-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/invoicecraftly-data-model.yml
+- type: ChangeLog
+  url: changelog/invoicecraftly-changelog.yml
+- type: ErrorCatalog
+  url: errors/invoicecraftly-problem-types.yml
+- type: Conformance
+  url: conformance/invoicecraftly-conformance.yml
+- type: LLMsTxt
+  url: llms/invoicecraftly-llms.txt
+- type: Hosts
+  url: hosts/invoicecraftly-hosts.yml
+- type: Vendors
+  url: vendors/invoicecraftly-vendors.yml
+- type: SDKs
+  url: packages/invoicecraftly-packages.yml
+- type: Packages
+  url: packages/invoicecraftly-packages.yml
+- type: Security
+  url: https://invoicecraftly.com/security
+- type: PrivacyPolicy
+  url: https://invoicecraftly.com/privacy
+- type: Documentation
+  url: https://invoicecraftly.com/guides/
+- type: ChangeLog
+  url: https://invoicecraftly.com/changelog
+- type: APIReference
+  url: https://invoicecraftly.com/developers/
+- type: Authentication
+  url: authentication/invoicecraftly-authentication.yml
+- type: DomainSecurity
+  url: security/invoicecraftly-domain-security.yml
 - type: Website
   url: https://invoicecraftly.com/
+- type: GettingStarted
+  url: https://invoicecraftly.com/guides/
+- type: Support
+  url: https://invoicecraftly.com/contact
+apis:
+- aid: invoicecraftly:invoicecraftly-documents-api
+  name: InvoiceCraftly Developer Document API Documents API
+  description: Invoice document generation.
+  humanURL: https://invoicecraftly.com/developers/
+  baseURL: https://invoicecraftly.com
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/invoicecraftly-documents-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-public-document-v1-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-readiness-response-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-structured-artifact-response-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-public-structured-artifact-request-v1-schema.json
+- aid: invoicecraftly:invoicecraftly-structured-invoicing-api
+  name: InvoiceCraftly Developer Document API Structured invoicing API
+  description: EN16931-core readiness and structured XML.
+  humanURL: https://invoicecraftly.com/developers/
+  baseURL: https://invoicecraftly.com
+  tags:
+  - Structured invoicing
+  properties:
+  - type: OpenAPI
+    url: openapi/invoicecraftly-structured-invoicing-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-public-document-v1-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-readiness-response-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-structured-artifact-response-schema.json
+  - type: JSONSchema
+    url: json-schema/invoicecraftly-public-structured-artifact-request-v1-schema.json
+x-enrichment:
+  date: '2026-09-25'
+  status: enriched
+  artifacts_added: 31
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local
