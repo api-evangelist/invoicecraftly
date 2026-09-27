@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Invoicecraftly Structured invoicing API
+  title: InvoiceCraftly Developer Document Structured invoicing API
   version: 1.0.0-beta
-  description: 'Operations tagged Structured invoicing across 2 of this provider''s published API definitions: invoicecraftly-openapi.json, invoicecraftly-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML. Structured output is not a Peppol BIS artifact and does not perform network delivery.
 servers:
 - url: https://invoicecraftly.com
   description: Production
@@ -42,9 +42,6 @@ paths:
           $ref: '#/components/responses/TargetNotSupported'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://invoicecraftly.com
-      description: Production
   /api/v1/documents/structured:
     post:
       tags:
@@ -75,26 +72,8 @@ paths:
           $ref: '#/components/responses/TargetNotSupported'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
-    servers:
-    - url: https://invoicecraftly.com
-      description: Production
 components:
   schemas:
-    PostalAddress:
-      type: object
-      properties:
-        countryCode:
-          type: string
-          pattern: ^[A-Za-z]{2}$
-        city:
-          type: string
-          maxLength: 128
-        postalCode:
-          type: string
-          maxLength: 128
-        region:
-          type: string
-          maxLength: 128
     ComplianceParty:
       type: object
       properties:
@@ -109,20 +88,6 @@ components:
           maxLength: 256
         taxRegistrationIdentifier:
           $ref: '#/components/schemas/TaxRegistrationIdentifier'
-    Party:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - addressLines
-      properties:
-        name:
-          type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
     ReadinessResponse:
       type: object
       required:
@@ -150,56 +115,65 @@ components:
           items:
             type: object
             additionalProperties: true
-    LineItem:
+    Branding:
       type: object
       additionalProperties: false
-      required:
-      - description
-      - quantity
-      - unitPrice
-      - taxRate
       properties:
-        description:
+        accentColor:
           type: string
-          minLength: 1
-        quantity:
-          type: number
-          exclusiveMinimum: 0
-        unitPrice:
-          type: number
-          minimum: 0
-        taxRate:
-          type: number
-          minimum: 0
-          maximum: 100
-        taxLabel:
-          type: string
-    TaxIdMetadata:
-      type: object
-      properties:
-        role:
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
           type: string
           enum:
-          - seller-id
-          - legal-registration
-          - tax-registration
-          - vat
-        schemeId:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
+    ComplianceLine:
+      type: object
+      required:
+      - sourceIndex
+      properties:
+        sourceIndex:
+          type: integer
+          minimum: 0
+        unitCode:
           type: string
-          maxLength: 32
-        taxSchemeId:
+          maxLength: 8
+        vatCategoryCode:
           type: string
-          maxLength: 32
-    PublicStructuredArtifactRequestV1:
+          enum:
+          - AE
+          - B
+          - E
+          - G
+          - K
+          - L
+          - M
+          - O
+          - S
+          - Z
+        vatExemptionReason:
+          type: string
+          maxLength: 256
+        vatExemptionReasonCode:
+          type: string
+          maxLength: 64
+    Party:
       type: object
       additionalProperties: false
       required:
-      - document
+      - name
+      - addressLines
       properties:
-        document:
-          $ref: '#/components/schemas/PublicDocumentV1'
-        supplement:
-          $ref: '#/components/schemas/ComplianceSupplementV1'
+        name:
+          type: string
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
     StructuredArtifactResponse:
       allOf:
       - $ref: '#/components/schemas/ReadinessResponse'
@@ -222,97 +196,6 @@ components:
                 content:
                   type: string
                   description: EN16931-core UBL/XML when ready.
-    Payment:
-      type: object
-      additionalProperties: false
-      properties:
-        bankName:
-          type: string
-        iban:
-          type: string
-        bic:
-          type: string
-        accountNumber:
-          type: string
-        routingNumber:
-          type: string
-        reference:
-          type: string
-        poNumber:
-          type: string
-        terms:
-          type: string
-        dueText:
-          type: string
-        qrMode:
-          type: string
-          enum:
-          - ''
-          - contact
-          - epc
-          - paymentLink
-    TaxRegistrationIdentifier:
-      type: object
-      properties:
-        value:
-          type: string
-          maxLength: 256
-        taxSchemeId:
-          type: string
-          maxLength: 32
-    ComplianceSupplementV1:
-      type: object
-      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
-      properties:
-        version:
-          type: integer
-          enum:
-          - 1
-        buyerReference:
-          type: string
-          maxLength: 256
-        seller:
-          $ref: '#/components/schemas/ComplianceParty'
-        buyer:
-          $ref: '#/components/schemas/ComplianceParty'
-        lines:
-          type: array
-          maxItems: 250
-          items:
-            $ref: '#/components/schemas/ComplianceLine'
-    ErrorEnvelope:
-      type: object
-      additionalProperties: false
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          additionalProperties: false
-          required:
-          - code
-          - message
-          - requestId
-          - details
-          properties:
-            code:
-              type: string
-              enum:
-              - AUTHENTICATION_FAILED
-              - INVALID_REQUEST
-              - TARGET_NOT_SUPPORTED
-              - RATE_LIMITED
-              - RENDER_TIMEOUT
-              - PDF_RENDER_FAILED
-            message:
-              type: string
-            requestId:
-              type:
-              - string
-              - 'null'
-            details:
-              type: array
-              items: {}
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -371,6 +254,60 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
+    ComplianceSupplementV1:
+      type: object
+      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
+      properties:
+        version:
+          type: integer
+          enum:
+          - 1
+        buyerReference:
+          type: string
+          maxLength: 256
+        seller:
+          $ref: '#/components/schemas/ComplianceParty'
+        buyer:
+          $ref: '#/components/schemas/ComplianceParty'
+        lines:
+          type: array
+          maxItems: 250
+          items:
+            $ref: '#/components/schemas/ComplianceLine'
+    PublicStructuredArtifactRequestV1:
+      type: object
+      additionalProperties: false
+      required:
+      - document
+      properties:
+        document:
+          $ref: '#/components/schemas/PublicDocumentV1'
+        supplement:
+          $ref: '#/components/schemas/ComplianceSupplementV1'
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
+          type: string
     Logo:
       type: object
       additionalProperties: false
@@ -387,70 +324,109 @@ components:
           enum:
           - image/png
           - image/jpeg
-    Branding:
+    Payment:
       type: object
       additionalProperties: false
       properties:
-        accentColor:
+        bankName:
           type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
           type: string
           enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
-    ComplianceLine:
+          - ''
+          - contact
+          - epc
+          - paymentLink
+    TaxRegistrationIdentifier:
       type: object
-      required:
-      - sourceIndex
       properties:
-        sourceIndex:
-          type: integer
-          minimum: 0
-        unitCode:
-          type: string
-          maxLength: 8
-        vatCategoryCode:
-          type: string
-          enum:
-          - AE
-          - B
-          - E
-          - G
-          - K
-          - L
-          - M
-          - O
-          - S
-          - Z
-        vatExemptionReason:
+        value:
           type: string
           maxLength: 256
-        vatExemptionReasonCode:
+        taxSchemeId:
           type: string
-          maxLength: 64
+          maxLength: 32
+    TaxIdMetadata:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - seller-id
+          - legal-registration
+          - tax-registration
+          - vat
+        schemeId:
+          type: string
+          maxLength: 32
+        taxSchemeId:
+          type: string
+          maxLength: 32
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
+    PostalAddress:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          pattern: ^[A-Za-z]{2}$
+        city:
+          type: string
+          maxLength: 128
+        postalCode:
+          type: string
+          maxLength: 128
+        region:
+          type: string
+          maxLength: 128
   responses:
-    TargetNotSupported:
-      description: The requested document type or template is recognized but not currently supported.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    PayloadTooLarge:
-      description: Request body exceeds the accepted size.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    AuthenticationFailed:
-      description: API key is missing, invalid, or unavailable.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
     InvalidRequest:
       description: Request body is invalid.
       content:
@@ -463,6 +439,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    TargetNotSupported:
+      description: The requested document type or template is recognized but not currently supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    AuthenticationFailed:
+      description: API key is missing, invalid, or unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
   securitySchemes:
     bearerAuth:
       type: http
@@ -471,6 +465,3 @@ components:
 externalDocs:
   description: Developer documentation
   url: https://invoicecraftly.com/developers/
-x-refined-from:
-- invoicecraftly-openapi.json
-- invoicecraftly-openapi.json

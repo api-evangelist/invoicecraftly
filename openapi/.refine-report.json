@@ -1,27 +1,23 @@
 {
   "provider": "invoicecraftly",
   "sources": [
-    "_original/invoicecraftly-openapi.json",
-    "invoicecraftly-openapi.json"
+    "_original/invoicecraftly-openapi.json"
   ],
   "outputs": [
     "invoicecraftly-documents-api-openapi.yml",
     "invoicecraftly-structured-invoicing-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/invoicecraftly-openapi.json"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "invoicecraftly-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "invoicecraftly-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "tag 'Documents' spans 2 source specs (invoicecraftly-openapi.json, invoicecraftly-openapi.json): per-path servers applied",
-    "tag 'Structured invoicing' spans 2 source specs (invoicecraftly-openapi.json, invoicecraftly-openapi.json): per-path servers applied",
-    "apis.yml register: written (+2 apis, 2 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
+    "_original/invoicecraftly-openapi_2.json: archived document superseded by a larger archived document",
     "invoicecraftly-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "invoicecraftly-structured-invoicing-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

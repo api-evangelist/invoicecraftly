@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Invoicecraftly Documents API
+  title: InvoiceCraftly Developer Document Documents API
   version: 1.0.0-beta
-  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: invoicecraftly-openapi.json, invoicecraftly-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML. Structured output is not a Peppol BIS artifact and does not perform network delivery.
 servers:
 - url: https://invoicecraftly.com
   description: Production
@@ -54,25 +54,8 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
         '504':
           $ref: '#/components/responses/RenderTimeout'
-    servers:
-    - url: https://invoicecraftly.com
-      description: Production
 components:
   schemas:
-    Party:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - addressLines
-      properties:
-        name:
-          type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
     LineItem:
       type: object
       additionalProperties: false
@@ -97,39 +80,66 @@ components:
           maximum: 100
         taxLabel:
           type: string
-    ErrorEnvelope:
+    Payment:
+      type: object
+      additionalProperties: false
+      properties:
+        bankName:
+          type: string
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
+          type: string
+          enum:
+          - ''
+          - contact
+          - epc
+          - paymentLink
+    Logo:
       type: object
       additionalProperties: false
       required:
-      - error
+      - data
+      - mimeType
       properties:
-        error:
-          type: object
-          additionalProperties: false
-          required:
-          - code
-          - message
-          - requestId
-          - details
-          properties:
-            code:
-              type: string
-              enum:
-              - AUTHENTICATION_FAILED
-              - INVALID_REQUEST
-              - TARGET_NOT_SUPPORTED
-              - RATE_LIMITED
-              - RENDER_TIMEOUT
-              - PDF_RENDER_FAILED
-            message:
-              type: string
-            requestId:
-              type:
-              - string
-              - 'null'
-            details:
-              type: array
-              items: {}
+        data:
+          type: string
+          contentEncoding: base64
+          description: Base64 image data. Decoded size is limited to 512 KiB.
+        mimeType:
+          type: string
+          enum:
+          - image/png
+          - image/jpeg
+    Branding:
+      type: object
+      additionalProperties: false
+      properties:
+        accentColor:
+          type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -188,85 +198,54 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
-    Logo:
+    ErrorEnvelope:
       type: object
       additionalProperties: false
       required:
-      - data
-      - mimeType
+      - error
       properties:
-        data:
-          type: string
-          contentEncoding: base64
-          description: Base64 image data. Decoded size is limited to 512 KiB.
-        mimeType:
-          type: string
-          enum:
-          - image/png
-          - image/jpeg
-    Branding:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
+    Party:
       type: object
       additionalProperties: false
+      required:
+      - name
+      - addressLines
       properties:
-        accentColor:
+        name:
           type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
-          type: string
-          enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
-    Payment:
-      type: object
-      additionalProperties: false
-      properties:
-        bankName:
-          type: string
-        iban:
-          type: string
-        bic:
-          type: string
-        accountNumber:
-          type: string
-        routingNumber:
-          type: string
-        reference:
-          type: string
-        poNumber:
-          type: string
-        terms:
-          type: string
-        dueText:
-          type: string
-        qrMode:
-          type: string
-          enum:
-          - ''
-          - contact
-          - epc
-          - paymentLink
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
   responses:
-    AuthenticationFailed:
-      description: API key is missing, invalid, or unavailable.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    UnsupportedMediaType:
-      description: PDF generation requires application/json.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    RenderTimeout:
-      description: The PDF render exceeded its time budget.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
     TargetNotSupported:
       description: The requested document type or template is recognized but not currently supported.
       content:
@@ -275,6 +254,18 @@ components:
             $ref: '#/components/schemas/ErrorEnvelope'
     ServiceUnavailable:
       description: A required service is unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    AuthenticationFailed:
+      description: API key is missing, invalid, or unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RenderTimeout:
+      description: The PDF render exceeded its time budget.
       content:
         application/json:
           schema:
@@ -296,6 +287,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
+    UnsupportedMediaType:
+      description: PDF generation requires application/json.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
     PayloadTooLarge:
       description: Request body exceeds the accepted size.
       content:
@@ -310,6 +307,3 @@ components:
 externalDocs:
   description: Developer documentation
   url: https://invoicecraftly.com/developers/
-x-refined-from:
-- invoicecraftly-openapi.json
-- invoicecraftly-openapi.json
