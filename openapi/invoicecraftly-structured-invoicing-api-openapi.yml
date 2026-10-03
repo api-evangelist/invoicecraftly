@@ -74,6 +74,20 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
 components:
   schemas:
+    Party:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - addressLines
+      properties:
+        name:
+          type: string
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
     ComplianceParty:
       type: object
       properties:
@@ -88,6 +102,54 @@ components:
           maxLength: 256
         taxRegistrationIdentifier:
           $ref: '#/components/schemas/TaxRegistrationIdentifier'
+    StructuredArtifactResponse:
+      allOf:
+      - $ref: '#/components/schemas/ReadinessResponse'
+      - type: object
+        required:
+        - artifact
+        properties:
+          artifact:
+            oneOf:
+            - type: 'null'
+            - type: object
+              additionalProperties: false
+              required:
+              - mediaType
+              - content
+              properties:
+                mediaType:
+                  type: string
+                  const: application/xml
+                content:
+                  type: string
+                  description: EN16931-core UBL/XML when ready.
+    Logo:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - mimeType
+      properties:
+        data:
+          type: string
+          contentEncoding: base64
+          description: Base64 image data. Decoded size is limited to 512 KiB.
+        mimeType:
+          type: string
+          enum:
+          - image/png
+          - image/jpeg
+    PublicStructuredArtifactRequestV1:
+      type: object
+      additionalProperties: false
+      required:
+      - document
+      properties:
+        document:
+          $ref: '#/components/schemas/PublicDocumentV1'
+        supplement:
+          $ref: '#/components/schemas/ComplianceSupplementV1'
     ReadinessResponse:
       type: object
       required:
@@ -115,6 +177,108 @@ components:
           items:
             type: object
             additionalProperties: true
+    ComplianceSupplementV1:
+      type: object
+      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
+      properties:
+        version:
+          type: integer
+          enum:
+          - 1
+        buyerReference:
+          type: string
+          maxLength: 256
+        seller:
+          $ref: '#/components/schemas/ComplianceParty'
+        buyer:
+          $ref: '#/components/schemas/ComplianceParty'
+        lines:
+          type: array
+          maxItems: 250
+          items:
+            $ref: '#/components/schemas/ComplianceLine'
+    TaxIdMetadata:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - seller-id
+          - legal-registration
+          - tax-registration
+          - vat
+        schemeId:
+          type: string
+          maxLength: 32
+        taxSchemeId:
+          type: string
+          maxLength: 32
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
+          type: string
+    TaxRegistrationIdentifier:
+      type: object
+      properties:
+        value:
+          type: string
+          maxLength: 256
+        taxSchemeId:
+          type: string
+          maxLength: 32
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
     Branding:
       type: object
       additionalProperties: false
@@ -130,6 +294,21 @@ components:
           - none
         logo:
           $ref: '#/components/schemas/Logo'
+    PostalAddress:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          pattern: ^[A-Za-z]{2}$
+        city:
+          type: string
+          maxLength: 128
+        postalCode:
+          type: string
+          maxLength: 128
+        region:
+          type: string
+          maxLength: 128
     ComplianceLine:
       type: object
       required:
@@ -160,42 +339,35 @@ components:
         vatExemptionReasonCode:
           type: string
           maxLength: 64
-    Party:
+    Payment:
       type: object
       additionalProperties: false
-      required:
-      - name
-      - addressLines
       properties:
-        name:
+        bankName:
           type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
-    StructuredArtifactResponse:
-      allOf:
-      - $ref: '#/components/schemas/ReadinessResponse'
-      - type: object
-        required:
-        - artifact
-        properties:
-          artifact:
-            oneOf:
-            - type: 'null'
-            - type: object
-              additionalProperties: false
-              required:
-              - mediaType
-              - content
-              properties:
-                mediaType:
-                  type: string
-                  const: application/xml
-                content:
-                  type: string
-                  description: EN16931-core UBL/XML when ready.
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
+          type: string
+          enum:
+          - ''
+          - contact
+          - epc
+          - paymentLink
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -254,191 +426,7 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
-    ComplianceSupplementV1:
-      type: object
-      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
-      properties:
-        version:
-          type: integer
-          enum:
-          - 1
-        buyerReference:
-          type: string
-          maxLength: 256
-        seller:
-          $ref: '#/components/schemas/ComplianceParty'
-        buyer:
-          $ref: '#/components/schemas/ComplianceParty'
-        lines:
-          type: array
-          maxItems: 250
-          items:
-            $ref: '#/components/schemas/ComplianceLine'
-    PublicStructuredArtifactRequestV1:
-      type: object
-      additionalProperties: false
-      required:
-      - document
-      properties:
-        document:
-          $ref: '#/components/schemas/PublicDocumentV1'
-        supplement:
-          $ref: '#/components/schemas/ComplianceSupplementV1'
-    LineItem:
-      type: object
-      additionalProperties: false
-      required:
-      - description
-      - quantity
-      - unitPrice
-      - taxRate
-      properties:
-        description:
-          type: string
-          minLength: 1
-        quantity:
-          type: number
-          exclusiveMinimum: 0
-        unitPrice:
-          type: number
-          minimum: 0
-        taxRate:
-          type: number
-          minimum: 0
-          maximum: 100
-        taxLabel:
-          type: string
-    Logo:
-      type: object
-      additionalProperties: false
-      required:
-      - data
-      - mimeType
-      properties:
-        data:
-          type: string
-          contentEncoding: base64
-          description: Base64 image data. Decoded size is limited to 512 KiB.
-        mimeType:
-          type: string
-          enum:
-          - image/png
-          - image/jpeg
-    Payment:
-      type: object
-      additionalProperties: false
-      properties:
-        bankName:
-          type: string
-        iban:
-          type: string
-        bic:
-          type: string
-        accountNumber:
-          type: string
-        routingNumber:
-          type: string
-        reference:
-          type: string
-        poNumber:
-          type: string
-        terms:
-          type: string
-        dueText:
-          type: string
-        qrMode:
-          type: string
-          enum:
-          - ''
-          - contact
-          - epc
-          - paymentLink
-    TaxRegistrationIdentifier:
-      type: object
-      properties:
-        value:
-          type: string
-          maxLength: 256
-        taxSchemeId:
-          type: string
-          maxLength: 32
-    TaxIdMetadata:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - seller-id
-          - legal-registration
-          - tax-registration
-          - vat
-        schemeId:
-          type: string
-          maxLength: 32
-        taxSchemeId:
-          type: string
-          maxLength: 32
-    ErrorEnvelope:
-      type: object
-      additionalProperties: false
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          additionalProperties: false
-          required:
-          - code
-          - message
-          - requestId
-          - details
-          properties:
-            code:
-              type: string
-              enum:
-              - AUTHENTICATION_FAILED
-              - INVALID_REQUEST
-              - TARGET_NOT_SUPPORTED
-              - RATE_LIMITED
-              - RENDER_TIMEOUT
-              - PDF_RENDER_FAILED
-            message:
-              type: string
-            requestId:
-              type:
-              - string
-              - 'null'
-            details:
-              type: array
-              items: {}
-    PostalAddress:
-      type: object
-      properties:
-        countryCode:
-          type: string
-          pattern: ^[A-Za-z]{2}$
-        city:
-          type: string
-          maxLength: 128
-        postalCode:
-          type: string
-          maxLength: 128
-        region:
-          type: string
-          maxLength: 128
   responses:
-    InvalidRequest:
-      description: Request body is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    ServiceUnavailable:
-      description: A required service is unavailable.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
     PayloadTooLarge:
       description: Request body exceeds the accepted size.
       content:
@@ -453,6 +441,18 @@ components:
             $ref: '#/components/schemas/ErrorEnvelope'
     AuthenticationFailed:
       description: API key is missing, invalid, or unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    ServiceUnavailable:
+      description: A required service is unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    InvalidRequest:
+      description: Request body is invalid.
       content:
         application/json:
           schema:

@@ -56,30 +56,6 @@ paths:
           $ref: '#/components/responses/RenderTimeout'
 components:
   schemas:
-    LineItem:
-      type: object
-      additionalProperties: false
-      required:
-      - description
-      - quantity
-      - unitPrice
-      - taxRate
-      properties:
-        description:
-          type: string
-          minLength: 1
-        quantity:
-          type: number
-          exclusiveMinimum: 0
-        unitPrice:
-          type: number
-          minimum: 0
-        taxRate:
-          type: number
-          minimum: 0
-          maximum: 100
-        taxLabel:
-          type: string
     Payment:
       type: object
       additionalProperties: false
@@ -109,6 +85,20 @@ components:
           - contact
           - epc
           - paymentLink
+    Party:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - addressLines
+      properties:
+        name:
+          type: string
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
     Logo:
       type: object
       additionalProperties: false
@@ -125,21 +115,6 @@ components:
           enum:
           - image/png
           - image/jpeg
-    Branding:
-      type: object
-      additionalProperties: false
-      properties:
-        accentColor:
-          type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
-          type: string
-          enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -198,6 +173,30 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
+          type: string
     ErrorEnvelope:
       type: object
       additionalProperties: false
@@ -231,23 +230,47 @@ components:
             details:
               type: array
               items: {}
-    Party:
+    Branding:
       type: object
       additionalProperties: false
-      required:
-      - name
-      - addressLines
       properties:
-        name:
+        accentColor:
           type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
   responses:
     TargetNotSupported:
       description: The requested document type or template is recognized but not currently supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RenderTimeout:
+      description: The PDF render exceeded its time budget.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    RateLimited:
+      description: Monthly or service quota reached.
+      headers:
+        Retry-After:
+          schema:
+            type: string
+          description: Retry delay in seconds when supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
       content:
         application/json:
           schema:
@@ -264,37 +287,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    RenderTimeout:
-      description: The PDF render exceeded its time budget.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    InvalidRequest:
-      description: Request body is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    RateLimited:
-      description: Monthly or service quota reached.
-      headers:
-        Retry-After:
-          schema:
-            type: string
-          description: Retry delay in seconds when supplied.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
     UnsupportedMediaType:
       description: PDF generation requires application/json.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    PayloadTooLarge:
-      description: Request body exceeds the accepted size.
+    InvalidRequest:
+      description: Request body is invalid.
       content:
         application/json:
           schema:
