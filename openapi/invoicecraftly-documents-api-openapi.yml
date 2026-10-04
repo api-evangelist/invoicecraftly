@@ -85,6 +85,39 @@ components:
           - contact
           - epc
           - paymentLink
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
     Party:
       type: object
       additionalProperties: false
@@ -99,6 +132,21 @@ components:
           type: array
           items:
             type: string
+    Branding:
+      type: object
+      additionalProperties: false
+      properties:
+        accentColor:
+          type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
     Logo:
       type: object
       additionalProperties: false
@@ -115,6 +163,30 @@ components:
           enum:
           - image/png
           - image/jpeg
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
+          type: string
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -173,78 +245,6 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
-    LineItem:
-      type: object
-      additionalProperties: false
-      required:
-      - description
-      - quantity
-      - unitPrice
-      - taxRate
-      properties:
-        description:
-          type: string
-          minLength: 1
-        quantity:
-          type: number
-          exclusiveMinimum: 0
-        unitPrice:
-          type: number
-          minimum: 0
-        taxRate:
-          type: number
-          minimum: 0
-          maximum: 100
-        taxLabel:
-          type: string
-    ErrorEnvelope:
-      type: object
-      additionalProperties: false
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          additionalProperties: false
-          required:
-          - code
-          - message
-          - requestId
-          - details
-          properties:
-            code:
-              type: string
-              enum:
-              - AUTHENTICATION_FAILED
-              - INVALID_REQUEST
-              - TARGET_NOT_SUPPORTED
-              - RATE_LIMITED
-              - RENDER_TIMEOUT
-              - PDF_RENDER_FAILED
-            message:
-              type: string
-            requestId:
-              type:
-              - string
-              - 'null'
-            details:
-              type: array
-              items: {}
-    Branding:
-      type: object
-      additionalProperties: false
-      properties:
-        accentColor:
-          type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
-          type: string
-          enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
   responses:
     TargetNotSupported:
       description: The requested document type or template is recognized but not currently supported.
@@ -254,6 +254,12 @@ components:
             $ref: '#/components/schemas/ErrorEnvelope'
     RenderTimeout:
       description: The PDF render exceeded its time budget.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    ServiceUnavailable:
+      description: A required service is unavailable.
       content:
         application/json:
           schema:
@@ -269,14 +275,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    PayloadTooLarge:
-      description: Request body exceeds the accepted size.
+    InvalidRequest:
+      description: Request body is invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    ServiceUnavailable:
-      description: A required service is unavailable.
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
       content:
         application/json:
           schema:
@@ -289,12 +295,6 @@ components:
             $ref: '#/components/schemas/ErrorEnvelope'
     UnsupportedMediaType:
       description: PDF generation requires application/json.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    InvalidRequest:
-      description: Request body is invalid.
       content:
         application/json:
           schema:
