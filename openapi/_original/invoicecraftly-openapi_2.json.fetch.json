@@ -1,0 +1,12 @@
+{
+ "url": "https://invoicecraftly.com/developers/openapi.json",
+ "requested_url": "https://invoicecraftly.com/developers/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 20583,
+ "sha256": "75f25a58885f0cb277872d1d59bb0f76bb2183cc25c880f7930712e7f5fb2a78",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
