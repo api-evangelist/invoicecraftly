@@ -13,3 +13,15 @@ plans:
   price_text: Free during the beta, 100 renders included per month
   description: Free tier during beta offering 100 document renders per month.
 docs: https://invoicecraftly.com/developers/recipes/
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Beta Free
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
