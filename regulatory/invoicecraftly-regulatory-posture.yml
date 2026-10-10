@@ -1,0 +1,30 @@
+generated: '2026-10-10'
+method: probed
+source: https://invoicecraftly.com/privacy
+signals:
+  data_retention:
+    url: https://invoicecraftly.com/privacy
+    section: Retention and deletion
+    note: Describes retention period for analytics events and aggregated data.
+    evidence:
+      - http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "Sanitized raw first-party product events are intended to be retained for up to 30 days. Aggregate daily or weekly counts may be kept for at least 13 months for product and acquisition reporting."
+  data_subject_request:
+    url: https://invoicecraftly.com/privacy
+    section: Retention and deletion
+    note: Provides mechanism for users to request deletion of their data.
+    evidence:
+      - http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "InvoiceCraftly account: use the account deletion flow or contact InvoiceCraftly for a privacy/data request."
+  subprocessors:
+    url: https://invoicecraftly.com/privacy
+    note: Indicates use of Google Analytics and hosting providers processing connection data.
+    evidence:
+      - http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "InvoiceCraftly uses Google Analytics and first-party product measurement only after you choose Allow analytics."
+      - http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "Hosting and security providers can therefore process ordinary connection information such as IP address, browser information, requested URL, timestamps, and security logs."

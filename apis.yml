@@ -37,6 +37,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: WellKnown
+  url: well-known/invoicecraftly-well-known.yml
 - type: Pricing
   url: https://invoicecraftly.com/developers/recipes/
 - url: https://invoicecraftly.com/feed.xml
@@ -134,8 +136,8 @@ apis:
   - type: JSONSchema
     url: json-schema/invoicecraftly-public-structured-artifact-request-v1-schema.json
 x-enrichment:
-  date: '2026-09-25'
+  date: '2026-10-10'
   status: enriched
-  artifacts_added: 31
+  artifacts_added: 7
   pass: modular-v1
-  engine: identity=local,contract=local,surfaces=local,docs=local
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

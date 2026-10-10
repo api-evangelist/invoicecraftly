@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: InvoiceCraftly Developer Document Structured invoicing API
+  title: Invoicecraftly Structured invoicing API
   version: 1.0.0-beta
-  description: Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML. Structured output is not a Peppol BIS artifact and does not perform network delivery.
+  description: 'Operations tagged Structured invoicing across 2 of this provider''s published API definitions: invoicecraftly-openapi.json, invoicecraftly-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://invoicecraftly.com
   description: Production
@@ -42,6 +42,9 @@ paths:
           $ref: '#/components/responses/TargetNotSupported'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://invoicecraftly.com
+      description: Production
   /api/v1/documents/structured:
     post:
       tags:
@@ -72,23 +75,66 @@ paths:
           $ref: '#/components/responses/TargetNotSupported'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+    servers:
+    - url: https://invoicecraftly.com
+      description: Production
 components:
   schemas:
-    Branding:
+    StructuredArtifactResponse:
+      allOf:
+      - $ref: '#/components/schemas/ReadinessResponse'
+      - type: object
+        required:
+        - artifact
+        properties:
+          artifact:
+            oneOf:
+            - type: 'null'
+            - type: object
+              additionalProperties: false
+              required:
+              - mediaType
+              - content
+              properties:
+                mediaType:
+                  type: string
+                  const: application/xml
+                content:
+                  type: string
+                  description: EN16931-core UBL/XML when ready.
+    ErrorEnvelope:
       type: object
       additionalProperties: false
+      required:
+      - error
       properties:
-        accentColor:
-          type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
-          type: string
-          enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          - requestId
+          - details
+          properties:
+            code:
+              type: string
+              enum:
+              - AUTHENTICATION_FAILED
+              - INVALID_REQUEST
+              - TARGET_NOT_SUPPORTED
+              - RATE_LIMITED
+              - RENDER_TIMEOUT
+              - PDF_RENDER_FAILED
+            message:
+              type: string
+            requestId:
+              type:
+              - string
+              - 'null'
+            details:
+              type: array
+              items: {}
     Logo:
       type: object
       additionalProperties: false
@@ -105,6 +151,54 @@ components:
           enum:
           - image/png
           - image/jpeg
+    Branding:
+      type: object
+      additionalProperties: false
+      properties:
+        accentColor:
+          type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
+    PublicStructuredArtifactRequestV1:
+      type: object
+      additionalProperties: false
+      required:
+      - document
+      properties:
+        document:
+          $ref: '#/components/schemas/PublicDocumentV1'
+        supplement:
+          $ref: '#/components/schemas/ComplianceSupplementV1'
+    TaxRegistrationIdentifier:
+      type: object
+      properties:
+        value:
+          type: string
+          maxLength: 256
+        taxSchemeId:
+          type: string
+          maxLength: 32
+    Party:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - addressLines
+      properties:
+        name:
+          type: string
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
     LineItem:
       type: object
       additionalProperties: false
@@ -129,20 +223,6 @@ components:
           maximum: 100
         taxLabel:
           type: string
-    ComplianceParty:
-      type: object
-      properties:
-        postalAddress:
-          $ref: '#/components/schemas/PostalAddress'
-        electronicAddressSchemeId:
-          type: string
-        taxId:
-          $ref: '#/components/schemas/TaxIdMetadata'
-        vatIdentifier:
-          type: string
-          maxLength: 256
-        taxRegistrationIdentifier:
-          $ref: '#/components/schemas/TaxRegistrationIdentifier'
     ComplianceLine:
       type: object
       required:
@@ -173,6 +253,113 @@ components:
         vatExemptionReasonCode:
           type: string
           maxLength: 64
+    TaxIdMetadata:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - seller-id
+          - legal-registration
+          - tax-registration
+          - vat
+        schemeId:
+          type: string
+          maxLength: 32
+        taxSchemeId:
+          type: string
+          maxLength: 32
+    ComplianceSupplementV1:
+      type: object
+      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
+      properties:
+        version:
+          type: integer
+          enum:
+          - 1
+        buyerReference:
+          type: string
+          maxLength: 256
+        seller:
+          $ref: '#/components/schemas/ComplianceParty'
+        buyer:
+          $ref: '#/components/schemas/ComplianceParty'
+        lines:
+          type: array
+          maxItems: 250
+          items:
+            $ref: '#/components/schemas/ComplianceLine'
+    Payment:
+      type: object
+      additionalProperties: false
+      properties:
+        bankName:
+          type: string
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
+          type: string
+          enum:
+          - ''
+          - contact
+          - epc
+          - paymentLink
+    ReadinessResponse:
+      type: object
+      required:
+      - apiVersion
+      - profileId
+      - specificationIdentifier
+      - ready
+      - gaps
+      properties:
+        apiVersion:
+          type: string
+          const: v1
+        profileId:
+          type: string
+          examples:
+          - en16931-core
+        specificationIdentifier:
+          type: string
+          examples:
+          - urn:cen.eu:en16931:2017
+        ready:
+          type: boolean
+        gaps:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    PostalAddress:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          pattern: ^[A-Za-z]{2}$
+        city:
+          type: string
+          maxLength: 128
+        postalCode:
+          type: string
+          maxLength: 128
+        region:
+          type: string
+          maxLength: 128
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -231,204 +418,41 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
-    ReadinessResponse:
+    ComplianceParty:
       type: object
-      required:
-      - apiVersion
-      - profileId
-      - specificationIdentifier
-      - ready
-      - gaps
       properties:
-        apiVersion:
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        electronicAddressSchemeId:
           type: string
-          const: v1
-        profileId:
-          type: string
-          examples:
-          - en16931-core
-        specificationIdentifier:
-          type: string
-          examples:
-          - urn:cen.eu:en16931:2017
-        ready:
-          type: boolean
-        gaps:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    ComplianceSupplementV1:
-      type: object
-      description: Optional EN16931-core metadata. Unknown nested fields are ignored by the current normalizer; listed fields are the supported public surface.
-      properties:
-        version:
-          type: integer
-          enum:
-          - 1
-        buyerReference:
+        taxId:
+          $ref: '#/components/schemas/TaxIdMetadata'
+        vatIdentifier:
           type: string
           maxLength: 256
-        seller:
-          $ref: '#/components/schemas/ComplianceParty'
-        buyer:
-          $ref: '#/components/schemas/ComplianceParty'
-        lines:
-          type: array
-          maxItems: 250
-          items:
-            $ref: '#/components/schemas/ComplianceLine'
-    Party:
+        taxRegistrationIdentifier:
+          $ref: '#/components/schemas/TaxRegistrationIdentifier'
+    StructuredArtifactResponse_2:
       type: object
-      additionalProperties: false
-      required:
-      - name
-      - addressLines
-      properties:
-        name:
-          type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
-    ErrorEnvelope:
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PublicStructuredArtifactRequestV1_2:
       type: object
-      additionalProperties: false
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          additionalProperties: false
-          required:
-          - code
-          - message
-          - requestId
-          - details
-          properties:
-            code:
-              type: string
-              enum:
-              - AUTHENTICATION_FAILED
-              - INVALID_REQUEST
-              - TARGET_NOT_SUPPORTED
-              - RATE_LIMITED
-              - RENDER_TIMEOUT
-              - PDF_RENDER_FAILED
-            message:
-              type: string
-            requestId:
-              type:
-              - string
-              - 'null'
-            details:
-              type: array
-              items: {}
-    StructuredArtifactResponse:
-      allOf:
-      - $ref: '#/components/schemas/ReadinessResponse'
-      - type: object
-        required:
-        - artifact
-        properties:
-          artifact:
-            oneOf:
-            - type: 'null'
-            - type: object
-              additionalProperties: false
-              required:
-              - mediaType
-              - content
-              properties:
-                mediaType:
-                  type: string
-                  const: application/xml
-                content:
-                  type: string
-                  description: EN16931-core UBL/XML when ready.
-    PostalAddress:
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    ReadinessResponse_2:
       type: object
-      properties:
-        countryCode:
-          type: string
-          pattern: ^[A-Za-z]{2}$
-        city:
-          type: string
-          maxLength: 128
-        postalCode:
-          type: string
-          maxLength: 128
-        region:
-          type: string
-          maxLength: 128
-    Payment:
-      type: object
-      additionalProperties: false
-      properties:
-        bankName:
-          type: string
-        iban:
-          type: string
-        bic:
-          type: string
-        accountNumber:
-          type: string
-        routingNumber:
-          type: string
-        reference:
-          type: string
-        poNumber:
-          type: string
-        terms:
-          type: string
-        dueText:
-          type: string
-        qrMode:
-          type: string
-          enum:
-          - ''
-          - contact
-          - epc
-          - paymentLink
-    PublicStructuredArtifactRequestV1:
-      type: object
-      additionalProperties: false
-      required:
-      - document
-      properties:
-        document:
-          $ref: '#/components/schemas/PublicDocumentV1'
-        supplement:
-          $ref: '#/components/schemas/ComplianceSupplementV1'
-    TaxRegistrationIdentifier:
-      type: object
-      properties:
-        value:
-          type: string
-          maxLength: 256
-        taxSchemeId:
-          type: string
-          maxLength: 32
-    TaxIdMetadata:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - seller-id
-          - legal-registration
-          - tax-registration
-          - vat
-        schemeId:
-          type: string
-          maxLength: 32
-        taxSchemeId:
-          type: string
-          maxLength: 32
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   responses:
-    ServiceUnavailable:
-      description: A required service is unavailable.
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    AuthenticationFailed:
+      description: API key is missing, invalid, or unavailable.
       content:
         application/json:
           schema:
@@ -445,18 +469,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    PayloadTooLarge:
-      description: Request body exceeds the accepted size.
+    ServiceUnavailable:
+      description: A required service is unavailable.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    AuthenticationFailed:
-      description: API key is missing, invalid, or unavailable.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
+  examples:
+    ReadinessRequestNotReady:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    ReadinessRequestReady:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     bearerAuth:
       type: http
@@ -465,3 +492,6 @@ components:
 externalDocs:
   description: Developer documentation
   url: https://invoicecraftly.com/developers/
+x-refined-from:
+- invoicecraftly-openapi.json
+- invoicecraftly-openapi.json

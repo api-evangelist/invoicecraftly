@@ -1,4 +1,4 @@
-generated: '2026-09-25'
+generated: '2026-10-10'
 method: derived
 generator: derive-data-model.py
 source:
@@ -9,7 +9,7 @@ notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entit
 summary:
   entities: 16
   entities_in_spec: 16
-  relationships: 14
+  relationships: 12
 entities:
 - name: Branding
   fields: 3
@@ -36,11 +36,17 @@ entities:
 - name: PublicDocumentV1
   fields: 13
 - name: PublicStructuredArtifactRequestV1
-  fields: 2
+  fields: 0
+  description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder
+    so the document resolves; the shape is unknown and is NOT a claim about the API.
 - name: ReadinessResponse
-  fields: 5
+  fields: 0
+  description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder
+    so the document resolves; the shape is unknown and is NOT a claim about the API.
 - name: StructuredArtifactResponse
   fields: 0
+  description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder
+    so the document resolves; the shape is unknown and is NOT a claim about the API.
 - name: TaxIdMetadata
   fields: 3
 - name: TaxRegistrationIdentifier
@@ -70,26 +76,6 @@ relationships:
   to: Branding
   type: has_one
   via: branding
-- from: PublicStructuredArtifactRequestV1
-  to: PublicDocumentV1
-  type: has_one
-  via: document
-- from: PublicStructuredArtifactRequestV1
-  to: ComplianceSupplementV1
-  type: has_one
-  via: supplement
-- from: ComplianceSupplementV1
-  to: ComplianceParty
-  type: has_one
-  via: seller
-- from: ComplianceSupplementV1
-  to: ComplianceParty
-  type: has_one
-  via: buyer
-- from: ComplianceSupplementV1
-  to: ComplianceLine
-  type: has_many
-  via: lines
 - from: ComplianceParty
   to: PostalAddress
   type: has_one
@@ -102,3 +88,15 @@ relationships:
   to: TaxRegistrationIdentifier
   type: has_one
   via: taxRegistrationIdentifier
+- from: ComplianceSupplementV1
+  to: ComplianceParty
+  type: has_one
+  via: seller
+- from: ComplianceSupplementV1
+  to: ComplianceParty
+  type: has_one
+  via: buyer
+- from: ComplianceSupplementV1
+  to: ComplianceLine
+  type: has_many
+  via: lines

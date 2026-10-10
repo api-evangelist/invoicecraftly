@@ -1,0 +1,198 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "InvoiceCraftly Developer Document API",
+  "version": "1.0.0-beta",
+  "description": "Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML. Structured output is not a Peppol BIS artifact and does not perform network delivery.",
+  "contact": {
+   "name": "InvoiceCraftly",
+   "url": "https://invoicecraftly.com/contact"
+  }
+ },
+ "servers": [
+  {
+   "url": "https://invoicecraftly.com",
+   "description": "Production"
+  }
+ ],
+ "externalDocs": {
+  "description": "Developer documentation",
+  "url": "https://invoicecraftly.com/developers/"
+ },
+ "security": [
+  {
+   "bearerAuth": []
+  }
+ ],
+ "tags": [
+  {
+   "name": "Documents",
+   "description": "Invoice document generation."
+  },
+  {
+   "name": "Structured invoicing",
+   "description": "EN16931-core readiness and structured XML."
+  }
+ ],
+ "paths": {
+  "/api/v1/documents/pdf": {
+   "post": {
+    "tags": [
+     "Documents"
+    ],
+    "summary": "Generate an invoice PDF",
+    "description": "Generate a print-ready invoice PDF using the currently supported Ledger template. The beta supports invoice documents only.",
+    "operationId": "generateInvoicePdf",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PublicDocumentV1"
+       },
+       "examples": {
+        "invoice": {
+         "$ref": "#/components/examples/InvoiceDocument"
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Print-ready invoice PDF.",
+      "headers": {
+       "X-Render-Duration-Ms": {
+        "description": "Render duration when supplied by the rendering service.",
+        "schema": {
+         "type": "string"
+        }
+       }
+      },
+      "content": {
+       "application/pdf": {
+        "schema": {
+         "type": "string",
+         "format": "binary"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/invoices/readiness": {
+   "post": {
+    "tags": [
+     "Structured invoicing"
+    ],
+    "summary": "Check EN16931-core readiness",
+    "description": "Return deterministic EN16931-core readiness diagnostics. This endpoint does not generate XML.",
+    "operationId": "checkInvoiceReadiness",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PublicStructuredArtifactRequestV1"
+       },
+       "examples": {
+        "notReady": {
+         "$ref": "#/components/examples/ReadinessRequestNotReady"
+        },
+        "ready": {
+         "$ref": "#/components/examples/ReadinessRequestReady"
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Readiness result.",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReadinessResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/documents/structured": {
+   "post": {
+    "tags": [
+     "Structured invoicing"
+    ],
+    "summary": "Generate EN16931-core structured XML",
+    "description": "Return readiness diagnostics and, when ready, an EN16931-core UBL/XML artifact. This is not a Peppol BIS artifact and does not perform network delivery.",
+    "operationId": "generateStructuredInvoice",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PublicStructuredArtifactRequestV1"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Readiness result plus XML artifact when ready.",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/StructuredArtifactResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "PublicDocumentV1": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   },
+   "PublicStructuredArtifactRequestV1": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   },
+   "ReadinessResponse": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   },
+   "StructuredArtifactResponse": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   }
+  },
+  "examples": {
+   "InvoiceDocument": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   },
+   "ReadinessRequestNotReady": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   },
+   "ReadinessRequestReady": {
+    "type": "object",
+    "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+    "x-ae-placeholder": true
+   }
+  }
+ }
+}

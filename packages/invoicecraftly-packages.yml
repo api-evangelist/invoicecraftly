@@ -1,12 +1,13 @@
-generated: '2026-09-25'
+generated: '2026-10-10'
 method: probed
 generator: harvest-packages.py
 source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
 ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (agentic-access/invoicecraftly-agentic-access.yml,
-  authentication/invoicecraftly-authentication.yml, changelog/invoicecraftly-changelog.yml, conformance/invoicecraftly-conformance.yml, data-model/invoicecraftly-data-model.yml,
-  errors/invoicecraftly-problem-types.yml, hosts/invoicecraftly-hosts.yml, invoicecraftly.com, json-ld/invoicecraftly-context.jsonld, llms/invoicecraftly-llms.txt,
-  packages/invoicecraftly-packages.yml, plans/invoicecraftly-plans-pricing.yml, rules/invoicecraftly-rules.yml, security/invoicecraftly-domain-security.yml,
-  skills/_index.yml, vendors/invoicecraftly-vendors.yml, vocabulary/invoicecraftly-vocabulary.yml) or its accepted GitHub org.'
+  authentication/invoicecraftly-authentication.yml, capabilities/invoicecraftly-capability-edges.yml, changelog/invoicecraftly-changelog.yml,
+  conformance/invoicecraftly-conformance.yml, data-model/invoicecraftly-data-model.yml, errors/invoicecraftly-problem-types.yml, hosts/invoicecraftly-hosts.yml,
+  invoicecraftly.com, json-ld/invoicecraftly-context.jsonld, llms/invoicecraftly-llms.txt, overlays/invoicecraftly-openapi-overlay.yml, packages/invoicecraftly-packages.yml,
+  plans/invoicecraftly-plans-pricing.yml, rules/invoicecraftly-rules.yml, security/invoicecraftly-domain-security.yml, skills/_index.yml, vendors/invoicecraftly-vendors.yml,
+  vocabulary/invoicecraftly-vocabulary.yml) or its accepted GitHub org.'
 packages:
 - name: invoicecraftly
   registry: pypi
@@ -17,10 +18,10 @@ packages:
   published: '2026-09-08'
   evidence: metadata names invoicecraftly.com
 - name: "@invoicecraftly/client"
-  registry: "npm"
-  url: "https://www.npmjs.com/package/@invoicecraftly/client"
-  language: "JavaScript/TypeScript"
+  registry: npm
+  url: https://www.npmjs.com/package/@invoicecraftly/client
+  language: TypeScript
   official: true
-  version: "0.1.0"
-  published: "2024-03-15"
-  evidence: metadata homepage https://invoicecraftly.com
+  version: 0.1.0
+  published: '2026-09-08'
+  evidence: npm metadata homepage links to invoicecraftly.com

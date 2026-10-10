@@ -1,0 +1,36 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://invoicecraftly.com",
+      "service-desc": [
+        {
+          "href": "https://invoicecraftly.com/developers/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://invoicecraftly.com/developers/",
+          "type": "text/html"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://invoicecraftly.com/apis.json",
+          "type": "application/json"
+        }
+      ],
+      "item": [
+        {
+          "href": "https://invoicecraftly.com/api/v1/documents/pdf"
+        },
+        {
+          "href": "https://invoicecraftly.com/api/v1/invoices/readiness"
+        },
+        {
+          "href": "https://invoicecraftly.com/api/v1/documents/structured"
+        }
+      ]
+    }
+  ]
+}

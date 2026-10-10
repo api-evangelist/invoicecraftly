@@ -1,4 +1,4 @@
-generated: '2026-09-25'
+generated: '2026-10-10'
 method: derived
 generator: derive-problem-types.py
 source:
@@ -16,56 +16,56 @@ problems:
 - status: 400
   title: Bad Request
   description: Request body is invalid.
-  operations: 6
+  operations: 3
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 401
   title: Unauthorized
   description: API key is missing, invalid, or unavailable.
-  operations: 6
+  operations: 3
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 413
   title: Content Too Large
   description: Request body exceeds the accepted size.
-  operations: 6
+  operations: 3
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 415
   title: Unsupported Media Type
   description: PDF generation requires application/json.
-  operations: 2
+  operations: 1
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 422
   title: Unprocessable Content
   description: The requested document type or template is recognized but not currently supported.
-  operations: 6
+  operations: 3
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 429
   title: Too Many Requests
   description: Monthly or service quota reached.
-  operations: 2
+  operations: 1
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 503
   title: Service Unavailable
   description: A required service is unavailable.
-  operations: 6
+  operations: 3
   media_types:
   - application/json
   schema: ErrorEnvelope
 - status: 504
   title: Gateway Timeout
   description: The PDF render exceeded its time budget.
-  operations: 2
+  operations: 1
   media_types:
   - application/json
   schema: ErrorEnvelope

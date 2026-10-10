@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: InvoiceCraftly Developer Document Documents API
+  title: Invoicecraftly Documents API
   version: 1.0.0-beta
-  description: Beta API for generating invoice PDFs, checking EN16931-core readiness, and returning EN16931-core UBL/XML. Structured output is not a Peppol BIS artifact and does not perform network delivery.
+  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: invoicecraftly-openapi.json, invoicecraftly-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://invoicecraftly.com
   description: Production
@@ -54,37 +54,49 @@ paths:
           $ref: '#/components/responses/ServiceUnavailable'
         '504':
           $ref: '#/components/responses/RenderTimeout'
+    servers:
+    - url: https://invoicecraftly.com
+      description: Production
 components:
   schemas:
-    Payment:
+    Party:
       type: object
       additionalProperties: false
+      required:
+      - name
+      - addressLines
       properties:
-        bankName:
+        name:
           type: string
-        iban:
+          minLength: 1
+        addressLines:
+          type: array
+          items:
+            type: string
+    LineItem:
+      type: object
+      additionalProperties: false
+      required:
+      - description
+      - quantity
+      - unitPrice
+      - taxRate
+      properties:
+        description:
           type: string
-        bic:
+          minLength: 1
+        quantity:
+          type: number
+          exclusiveMinimum: 0
+        unitPrice:
+          type: number
+          minimum: 0
+        taxRate:
+          type: number
+          minimum: 0
+          maximum: 100
+        taxLabel:
           type: string
-        accountNumber:
-          type: string
-        routingNumber:
-          type: string
-        reference:
-          type: string
-        poNumber:
-          type: string
-        terms:
-          type: string
-        dueText:
-          type: string
-        qrMode:
-          type: string
-          enum:
-          - ''
-          - contact
-          - epc
-          - paymentLink
     ErrorEnvelope:
       type: object
       additionalProperties: false
@@ -118,75 +130,35 @@ components:
             details:
               type: array
               items: {}
-    Party:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - addressLines
-      properties:
-        name:
-          type: string
-          minLength: 1
-        addressLines:
-          type: array
-          items:
-            type: string
-    Branding:
+    Payment:
       type: object
       additionalProperties: false
       properties:
-        accentColor:
+        bankName:
           type: string
-          pattern: ^#[0-9a-fA-F]{3,8}$
-        stampStyle:
+        iban:
+          type: string
+        bic:
+          type: string
+        accountNumber:
+          type: string
+        routingNumber:
+          type: string
+        reference:
+          type: string
+        poNumber:
+          type: string
+        terms:
+          type: string
+        dueText:
+          type: string
+        qrMode:
           type: string
           enum:
-          - round
-          - square
-          - none
-        logo:
-          $ref: '#/components/schemas/Logo'
-    Logo:
-      type: object
-      additionalProperties: false
-      required:
-      - data
-      - mimeType
-      properties:
-        data:
-          type: string
-          contentEncoding: base64
-          description: Base64 image data. Decoded size is limited to 512 KiB.
-        mimeType:
-          type: string
-          enum:
-          - image/png
-          - image/jpeg
-    LineItem:
-      type: object
-      additionalProperties: false
-      required:
-      - description
-      - quantity
-      - unitPrice
-      - taxRate
-      properties:
-        description:
-          type: string
-          minLength: 1
-        quantity:
-          type: number
-          exclusiveMinimum: 0
-        unitPrice:
-          type: number
-          minimum: 0
-        taxRate:
-          type: number
-          minimum: 0
-          maximum: 100
-        taxLabel:
-          type: string
+          - ''
+          - contact
+          - epc
+          - paymentLink
     PublicDocumentV1:
       type: object
       additionalProperties: false
@@ -245,9 +217,79 @@ components:
           type: string
         branding:
           $ref: '#/components/schemas/Branding'
+    Logo:
+      type: object
+      additionalProperties: false
+      required:
+      - data
+      - mimeType
+      properties:
+        data:
+          type: string
+          contentEncoding: base64
+          description: Base64 image data. Decoded size is limited to 512 KiB.
+        mimeType:
+          type: string
+          enum:
+          - image/png
+          - image/jpeg
+    Branding:
+      type: object
+      additionalProperties: false
+      properties:
+        accentColor:
+          type: string
+          pattern: ^#[0-9a-fA-F]{3,8}$
+        stampStyle:
+          type: string
+          enum:
+          - round
+          - square
+          - none
+        logo:
+          $ref: '#/components/schemas/Logo'
+    PublicDocumentV1_2:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   responses:
+    RateLimited:
+      description: Monthly or service quota reached.
+      headers:
+        Retry-After:
+          schema:
+            type: string
+          description: Retry delay in seconds when supplied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    UnsupportedMediaType:
+      description: PDF generation requires application/json.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    PayloadTooLarge:
+      description: Request body exceeds the accepted size.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
     TargetNotSupported:
       description: The requested document type or template is recognized but not currently supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    InvalidRequest:
+      description: Request body is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    AuthenticationFailed:
+      description: API key is missing, invalid, or unavailable.
       content:
         application/json:
           schema:
@@ -264,41 +306,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
-    RateLimited:
-      description: Monthly or service quota reached.
-      headers:
-        Retry-After:
-          schema:
-            type: string
-          description: Retry delay in seconds when supplied.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    InvalidRequest:
-      description: Request body is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    PayloadTooLarge:
-      description: Request body exceeds the accepted size.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    AuthenticationFailed:
-      description: API key is missing, invalid, or unavailable.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
-    UnsupportedMediaType:
-      description: PDF generation requires application/json.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
+  examples:
+    InvoiceDocument:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     bearerAuth:
       type: http
@@ -307,3 +319,6 @@ components:
 externalDocs:
   description: Developer documentation
   url: https://invoicecraftly.com/developers/
+x-refined-from:
+- invoicecraftly-openapi.json
+- invoicecraftly-openapi.json
