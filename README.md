@@ -64,5 +64,140 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-InvoiceCraftly Developer Document API is a company surfaced via the API Evangelist harvest backlog (source: new-submission) and added to the network as a stub for full-pipeline profiling.
-- https://invoicecraftly.com/
+InvoiceCraftly provides a free, no‑signup invoice generator and related tools. Users can create, edit, and export professional invoices, quotes, estimates, receipts, and credit notes in PDF, PNG, SVG, and CSV formats. The platform offers templates, company lookup, QR‑code payment integration, and multilingual support, targeting freelancers, small businesses, and enterprises seeking a simple invoicing solution without account requirements.
+
+**Areas:** Invoicing · Invoice Generator · Free Tools · DocumentExport · Payment QR · No Signup · CSV Import · Company Lookup
+
+## InvoiceCraftly Developer Document API on APIs.io
+
+Everything profiled for InvoiceCraftly Developer Document API is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/invoicecraftly/](https://apis.io/providers/invoicecraftly/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [InvoiceCraftly Developer Document API Documents API](https://apis.io/apis/invoicecraftly/invoicecraftly-documents-api/) — Invoice document generation.
+- [InvoiceCraftly Developer Document API Structured invoicing API](https://apis.io/apis/invoicecraftly/invoicecraftly-structured-invoicing-api/) — EN16931-core readiness and structured XML.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [invoicecraftly-mcp.yml](https://apis.io/servers/invoicecraftly/invoicecraftly-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Invoicecraftly Agentic Access](https://apis.io/agentic-access/invoicecraftly/invoicecraftly-agentic-access/)
+
+#### JSON Schema (4)
+
+The data models the API reads and writes.
+
+- [PublicDocumentV1](https://apis.io/schemas/invoicecraftly/invoicecraftly-public-document-v1/)
+- [PublicStructuredArtifactRequestV1](https://apis.io/schemas/invoicecraftly/invoicecraftly-public-structured-artifact-request-v1/)
+- [ReadinessResponse](https://apis.io/schemas/invoicecraftly/invoicecraftly-readiness-response/)
+- [StructuredArtifactResponse](https://apis.io/schemas/invoicecraftly/invoicecraftly-structured-artifact-response/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Invoicecraftly Context](https://apis.io/jsonld/invoicecraftly/invoicecraftly-context/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Invoicecraftly Openapi Overlay](https://apis.io/overlays/invoicecraftly/invoicecraftly-openapi-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [InvoiceCraftly Developer Document API API Rules](https://apis.io/rules/invoicecraftly/invoicecraftly-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Invoicecraftly Authentication](https://apis.io/security/invoicecraftly/invoicecraftly-authentication/)
+- [Invoicecraftly Domain Security](https://apis.io/security/invoicecraftly/invoicecraftly-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Invoicecraftly Plans Pricing](https://apis.io/plans/invoicecraftly/invoicecraftly-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://invoicecraftly.com/)
+- [Documentation](https://invoicecraftly.com/guides/)
+- [Getting started](https://invoicecraftly.com/guides/)
+- [API reference](https://invoicecraftly.com/developers/)
+- [Pricing](https://invoicecraftly.com/developers/recipes/)
+- [Support](https://invoicecraftly.com/contact)
+- [Changelog](https://invoicecraftly.com/changelog)
+- [Security](https://invoicecraftly.com/security)
+- [Privacy policy](https://invoicecraftly.com/privacy)
+
+## API Evangelist rating
+
+**Kin Score 47.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 64.4 |
+| Contract governance | 22.0 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 54.2 |
+| Access clarity | 42.1 |
+
+**Agent readiness 28.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 18.8** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/invoicecraftly/](https://apis.io/providers/invoicecraftly/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for InvoiceCraftly Developer Document API: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/invoicecraftly/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
